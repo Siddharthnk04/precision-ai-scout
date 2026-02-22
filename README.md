@@ -130,8 +130,7 @@ The system is built on a modern **Next.js 14** stack, prioritizing security, per
 - **Icons**: Lucide React
 - **Analytics**: Custom internal tracking
 
-## Assignment Context
-This project was developed as a senior-level technical assessment for a VC-focused engineering role. It focuses on solving real-world domain problems with production-grade engineering practices, specifically targeting AI integration challenges like cost, reliability, and security.
+
 
 ## Final Status
 **STATUS: PRODUCTION READY**
