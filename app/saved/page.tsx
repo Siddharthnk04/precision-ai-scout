@@ -49,6 +49,7 @@ export default function SavedSearchesPage() {
         if (search.filters.sector) queryParams.set("sector", search.filters.sector);
         if (search.filters.stage) queryParams.set("stage", search.filters.stage);
         if (search.filters.geography) queryParams.set("geography", search.filters.geography);
+        if (search.filters.query) queryParams.set("search", search.filters.query);
 
         router.push(`/companies?${queryParams.toString()}`);
     };
@@ -57,46 +58,46 @@ export default function SavedSearchesPage() {
         <div className="space-y-8">
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-2xl font-bold text-brand-gray-900">Saved Searches</h1>
-                    <p className="text-brand-gray-500 mt-1">Quickly revisit filtered views matching your investment criteria.</p>
+                    <h1 className="text-2xl font-bold text-textPrimary">Saved Searches</h1>
+                    <p className="text-textSecondary mt-1">Quickly revisit filtered views matching your investment criteria.</p>
                 </div>
             </div>
 
             <div className="space-y-4">
                 {searches.map(search => (
-                    <div key={search.id} className="card group hover:border-brand-blue/30 transition-all">
+                    <div key={search.id} className="card group hover:border-primary/30 transition-all">
                         <div className="p-6 flex flex-col md:flex-row md:items-center justify-between gap-6">
                             <div className="flex items-start gap-4">
-                                <div className="w-10 h-10 rounded-lg bg-brand-gray-50 flex items-center justify-center border border-brand-gray-200 group-hover:bg-brand-blue/5 group-hover:border-brand-blue/20 transition-colors">
-                                    <Bookmark className="w-5 h-5 text-brand-gray-400 group-hover:text-brand-blue transition-colors" />
+                                <div className="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center border border-borderDark group-hover:bg-primary/10 group-hover:border-primary/20 transition-all duration-300">
+                                    <Bookmark className="w-5 h-5 text-textSecondary group-hover:text-accent transition-colors" />
                                 </div>
                                 <div>
-                                    <h3 className="font-bold text-brand-gray-900">{search.name}</h3>
-                                    <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1">
-                                        <div className="flex items-center gap-1.5 text-xs text-brand-gray-500 font-medium">
-                                            <Calendar className="w-3 h-3" />
+                                    <h3 className="font-bold text-textPrimary group-hover:text-accent transition-colors">{search.name}</h3>
+                                    <div className="flex flex-wrap gap-x-6 gap-y-1 mt-1">
+                                        <div className="flex items-center gap-1.5 text-[10px] text-textSecondary/60 font-bold uppercase tracking-widest">
+                                            <Calendar className="w-3.5 h-3.5" />
                                             Saved {new Date(search.createdAt).toLocaleDateString()}
                                         </div>
                                         {Object.entries(search.filters).map(([key, value]) => value && (
-                                            <div key={key} className="flex items-center gap-1.5 text-xs text-brand-blue font-bold uppercase tracking-wider">
-                                                <Filter className="w-3 h-3" />
-                                                {key}: {value}
+                                            <div key={key} className="flex items-center gap-1.5 text-[10px] text-accent font-bold uppercase tracking-widest">
+                                                <Filter className="w-3.5 h-3.5" />
+                                                {key === 'query' ? 'Search' : key}: {value}
                                             </div>
                                         ))}
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-3">
                                 <button
                                     onClick={() => handleRunSearch(search)}
-                                    className="btn btn-primary flex gap-2 text-xs py-2 px-4 shadow-sm"
+                                    className="btn btn-primary flex gap-2 text-[10px] font-bold uppercase tracking-widest py-2 px-5 shadow-lg shadow-primary/20"
                                 >
                                     <Play className="w-3.5 h-3.5 fill-current" /> Run Search
                                 </button>
                                 <button
                                     onClick={() => handleDelete(search.id)}
-                                    className="btn btn-secondary p-2 group-hover:border-red-100 group-hover:text-red-500 transition-all"
+                                    className="btn btn-secondary p-2.5 rounded-xl hover:bg-red-500/10 hover:text-red-400 border border-transparent hover:border-red-500/20 transition-all"
                                     title="Delete"
                                 >
                                     <Trash2 className="w-4 h-4" />
@@ -107,13 +108,15 @@ export default function SavedSearchesPage() {
                 ))}
 
                 {searches.length === 0 && (
-                    <div className="card p-12 text-center bg-brand-gray-50/50 border-dashed border-2">
-                        <Search className="w-8 h-8 text-brand-gray-300 mx-auto mb-4" />
-                        <h3 className="font-semibold text-brand-gray-900">No saved searches</h3>
-                        <p className="text-sm text-brand-gray-500 mt-2">
-                            Save your current discovery filters to quickly access them later.
+                    <div className="card p-16 text-center bg-slate-800/20 border-dashed border-2 border-borderDark/60">
+                        <div className="w-16 h-16 bg-slate-800 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-borderDark shadow-inner">
+                            <Search className="w-8 h-8 text-textSecondary/30" />
+                        </div>
+                        <h3 className="font-bold text-lg text-textPrimary">No saved searches</h3>
+                        <p className="text-sm text-textSecondary mt-2 max-w-sm mx-auto">
+                            Save your current discovery filters as shortcuts to revisit them with a single click.
                         </p>
-                        <Link href="/companies" className="btn btn-secondary mt-6">
+                        <Link href="/companies" className="btn btn-primary mt-8 px-8">
                             Go to Discovery
                         </Link>
                     </div>

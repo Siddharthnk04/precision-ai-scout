@@ -34,12 +34,21 @@ export const EnrichmentSourceSchema = z.object({
     timestamp: z.string().datetime(),
 });
 
+export const EnrichmentSignalSchema = z.object({
+    title: z.string(),
+    description: z.string(),
+    timestamp: z.string().datetime(),
+});
+
 export const EnrichmentDataSchema = z.object({
     summary: z.string(),
-    whatTheyDo: z.array(z.string()),
+    bullets: z.array(z.string()),
     keywords: z.array(z.string()),
-    signals: z.array(z.string()),
-    sources: z.array(EnrichmentSourceSchema),
+    signals: z.array(EnrichmentSignalSchema),
+    sources: z.array(z.string()),
+    thesisScore: z.number().min(0).max(100),
+    thesisRationale: z.string(),
+    enrichedAt: z.string().datetime(),
 });
 export type EnrichmentData = z.infer<typeof EnrichmentDataSchema>;
 

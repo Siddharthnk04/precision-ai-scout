@@ -16,6 +16,7 @@ import {
     ChevronRight,
 } from "lucide-react";
 import Link from "next/link";
+import { track } from "@/lib/analytics";
 
 export default function ListsPage() {
     const [lists, setLists] = useState<InvestmentList[]>([]);
@@ -57,6 +58,7 @@ export default function ListsPage() {
     };
 
     const exportAsJSON = (list: InvestmentList) => {
+        track("export_json");
         const listCompanies = MOCK_COMPANIES.filter(c => list.companyIds.includes(c.id));
         const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(listCompanies, null, 2));
         const downloadAnchorNode = document.createElement('a');
@@ -68,6 +70,7 @@ export default function ListsPage() {
     };
 
     const exportAsCSV = (list: InvestmentList) => {
+        track("export_csv");
         const listCompanies = MOCK_COMPANIES.filter(c => list.companyIds.includes(c.id));
         const headers = "id,name,website,sector,stage,geography\n";
         const rows = listCompanies.map(c => `${c.id},${c.name},${c.website},${c.sector},${c.stage},${c.geography}`).join("\n");
@@ -97,8 +100,8 @@ export default function ListsPage() {
         <div className="space-y-8">
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-2xl font-bold text-brand-gray-900">Investment Lists</h1>
-                    <p className="text-brand-gray-500 mt-1">Organize your pipeline into functional workflows.</p>
+                    <h1 className="text-2xl font-bold text-textPrimary">Investment Lists</h1>
+                    <p className="text-textSecondary mt-1">Organize your pipeline into functional workflows.</p>
                 </div>
                 <div className="flex gap-2">
                     <input
@@ -106,11 +109,11 @@ export default function ListsPage() {
                         placeholder="New list name..."
                         value={newListName}
                         onChange={(e) => setNewListName(e.target.value)}
-                        className="bg-white border border-brand-gray-200 rounded-md py-1.5 px-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-brand-blue/20"
+                        className="bg-slate-800 border border-borderDark rounded-lg py-1.5 px-3 text-sm text-textPrimary placeholder-textSecondary/40 focus:outline-hidden focus:ring-2 focus:ring-primary/20 transition-all"
                     />
                     <button
                         onClick={handleCreateList}
-                        className="btn btn-primary flex gap-2"
+                        className="btn btn-primary flex gap-2 shadow-lg shadow-primary/20"
                     >
                         <Plus className="w-4 h-4" /> Create List
                     </button>
@@ -119,15 +122,15 @@ export default function ListsPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {lists.map(list => (
-                    <div key={list.id} className="card flex flex-col group">
-                        <div className="p-6 border-b border-brand-gray-100 flex items-start justify-between bg-brand-gray-50/50">
+                    <div key={list.id} className="card flex flex-col group overflow-hidden">
+                        <div className="p-6 border-b border-borderDark flex items-start justify-between bg-slate-800/50">
                             <div>
-                                <h3 className="font-bold text-brand-gray-900">{list.name}</h3>
-                                <p className="text-xs text-brand-gray-500 mt-1">Created {new Date(list.createdAt).toLocaleDateString()}</p>
+                                <h3 className="font-bold text-textPrimary">{list.name}</h3>
+                                <p className="text-[10px] text-textSecondary/60 font-bold uppercase tracking-widest mt-1">Created {new Date(list.createdAt).toLocaleDateString()}</p>
                             </div>
                             <button
                                 onClick={() => handleDeleteList(list.id)}
-                                className="text-brand-gray-400 hover:text-red-500 transition-colors"
+                                className="text-textSecondary/40 hover:text-red-400 transition-colors p-1 rounded-md hover:bg-red-500/10"
                                 title="Delete List"
                             >
                                 <Trash2 className="w-4 h-4" />
@@ -136,7 +139,7 @@ export default function ListsPage() {
 
                         <div className="p-6 flex-1 space-y-4">
                             <div className="flex items-center justify-between">
-                                <span className="text-sm font-medium text-brand-gray-600">Companies</span>
+                                <span className="text-xs font-bold text-textSecondary uppercase tracking-widest">Companies</span>
                                 <span className="badge badge-neutral">{list.companyIds.length}</span>
                             </div>
 
@@ -147,51 +150,51 @@ export default function ListsPage() {
                                         <Link
                                             key={compId}
                                             href={`/companies/${compId}`}
-                                            className="flex items-center justify-between p-2 rounded-md hover:bg-brand-gray-50 border border-transparent hover:border-brand-gray-100 transition-all group"
+                                            className="flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-800/80 border border-transparent hover:border-borderDark transition-all group/item"
                                         >
-                                            <div className="flex items-center gap-1.5">
+                                            <div className="flex items-center gap-2">
                                                 <button
                                                     onClick={(e) => {
                                                         e.preventDefault();
                                                         e.stopPropagation();
                                                         handleRemoveCompany(list.id, compId);
                                                     }}
-                                                    className="p-1 text-brand-gray-300 hover:text-red-500 hover:bg-red-50 rounded transition-all opacity-0 group-hover:opacity-100"
+                                                    className="p-1 text-textSecondary/20 hover:text-red-400 hover:bg-red-500/10 rounded-md transition-all opacity-0 group-hover/item:opacity-100"
                                                     title="Remove from list"
                                                 >
                                                     <Trash2 className="w-3.5 h-3.5" />
                                                 </button>
-                                                <span className="text-sm font-medium text-brand-gray-900">{company.name}</span>
+                                                <span className="text-sm font-semibold text-textPrimary group-hover/item:text-accent transition-colors">{company.name}</span>
                                             </div>
-                                            <ChevronRight className="w-3 h-3 text-brand-gray-300 group-hover:text-brand-gray-500" />
+                                            <ChevronRight className="w-4 h-4 text-textSecondary/20 group-hover/item:text-textPrimary transition-all transform group-hover/item:translate-x-0.5" />
                                         </Link>
                                     ) : null;
                                 })}
                                 {list.companyIds.length > 3 && (
-                                    <p className="text-[11px] text-brand-gray-400 text-center font-bold uppercase tracking-widest pt-1">
+                                    <p className="text-[10px] text-textSecondary/40 text-center font-bold uppercase tracking-widest pt-3 border-t border-borderDark/30 mt-2">
                                         + {list.companyIds.length - 3} more companies
                                     </p>
                                 )}
                                 {list.companyIds.length === 0 && (
-                                    <p className="text-sm text-brand-gray-400 italic text-center py-4">No companies added yet.</p>
+                                    <p className="text-sm text-textSecondary/40 italic text-center py-6">No companies added yet.</p>
                                 )}
                             </div>
                         </div>
 
-                        <div className="p-4 bg-white border-t border-brand-gray-100 flex gap-2">
+                        <div className="p-4 bg-slate-800/50 border-t border-borderDark flex gap-2">
                             <button
                                 onClick={() => exportAsCSV(list)}
-                                className="btn btn-secondary flex-1 text-[11px] font-bold uppercase tracking-wider py-2 gap-1.5"
+                                className="btn btn-secondary flex-1 text-[10px] font-bold uppercase tracking-widest py-2 gap-2"
                                 disabled={list.companyIds.length === 0}
                             >
-                                <FileSpreadsheet className="w-3 h-3" /> CSV
+                                <FileSpreadsheet className="w-3.5 h-3.5" /> CSV
                             </button>
                             <button
                                 onClick={() => exportAsJSON(list)}
-                                className="btn btn-secondary flex-1 text-[11px] font-bold uppercase tracking-wider py-2 gap-1.5"
+                                className="btn btn-secondary flex-1 text-[10px] font-bold uppercase tracking-widest py-2 gap-2"
                                 disabled={list.companyIds.length === 0}
                             >
-                                <FileJson className="w-3 h-3" /> JSON
+                                <FileJson className="w-3.5 h-3.5" /> JSON
                             </button>
                         </div>
                     </div>

@@ -21,8 +21,8 @@ export default function RootLayout({
             <body className={`${inter.variable} font-sans`}>
                 <div className="flex min-h-screen">
                     <Sidebar />
-                    <div className="flex-1 flex flex-col bg-brand-gray-50">
-                        <header className="sticky top-0 z-10 bg-brand-gray-50/80 backdrop-blur-md px-8 py-4 border-b border-brand-gray-200">
+                    <div className="flex-1 flex flex-col bg-bgDark">
+                        <header className="sticky top-0 z-10 bg-bgDark/80 backdrop-blur-md px-8 py-4 border-b border-borderDark/40">
                             <SearchBar />
                         </header>
                         <main className="flex-1 p-8 overflow-y-auto">

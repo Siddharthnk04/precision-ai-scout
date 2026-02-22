@@ -6,6 +6,7 @@ import { storage } from "@/lib/storage";
 import { X, Check, Loader2 } from "lucide-react";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { track } from "@/lib/analytics";
 
 function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
@@ -64,6 +65,7 @@ export default function AddToListModal({ isOpen, onClose, companyId, companyName
                 }
             }
             setSuccess(true);
+            track("add_to_list");
             setTimeout(() => {
                 onClose();
             }, 1000);
@@ -80,55 +82,55 @@ export default function AddToListModal({ isOpen, onClose, companyId, companyName
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
             {/* Overlay */}
             <div
-                className="absolute inset-0 bg-brand-gray-900/40 backdrop-blur-sm"
+                className="absolute inset-0 bg-slate-900/80 backdrop-blur-sm"
                 onClick={onClose}
             />
 
             {/* Modal */}
-            <div className="relative w-full max-w-md bg-white rounded-xl shadow-2xl border border-brand-gray-200 overflow-hidden animate-in fade-in zoom-in duration-200">
-                <div className="px-6 py-4 border-b border-brand-gray-100 flex items-center justify-between bg-brand-gray-50/50">
-                    <h3 className="font-bold text-brand-gray-900">Add to List</h3>
+            <div className="relative w-full max-w-md bg-cardDark rounded-xl shadow-2xl border border-borderDark overflow-hidden animate-in fade-in zoom-in duration-200">
+                <div className="px-6 py-4 border-b border-borderDark flex items-center justify-between bg-slate-800/50">
+                    <h3 className="font-bold text-textPrimary">Add to List</h3>
                     <button
                         onClick={onClose}
-                        className="p-1 rounded-md hover:bg-brand-gray-100 text-brand-gray-400 hover:text-brand-gray-600 transition-colors"
+                        className="p-1 rounded-md hover:bg-slate-700 text-textSecondary hover:text-textPrimary transition-colors"
                     >
                         <X className="w-5 h-5" />
                     </button>
                 </div>
 
                 <div className="p-6 space-y-4">
-                    <p className="text-sm text-brand-gray-500">
-                        Organize <span className="font-semibold text-brand-gray-900">{companyName}</span> into your investment pipelines.
+                    <p className="text-sm text-textSecondary">
+                        Organize <span className="font-semibold text-textPrimary">{companyName}</span> into your investment pipelines.
                     </p>
 
                     <div className="max-h-60 overflow-y-auto space-y-2 pr-2 custom-scrollbar">
                         {lists.length === 0 ? (
-                            <div className="py-8 text-center border-2 border-dashed border-brand-gray-100 rounded-lg">
-                                <p className="text-sm text-brand-gray-400">No lists found. Create one in the Lists page.</p>
+                            <div className="py-8 text-center border-2 border-dashed border-borderDark rounded-lg">
+                                <p className="text-sm text-textSecondary/40">No lists found. Create one in the Lists page.</p>
                             </div>
                         ) : (
                             lists.map(list => (
                                 <label
                                     key={list.id}
                                     className={cn(
-                                        "flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-all",
+                                        "flex items-center justify-between p-3 rounded-xl border cursor-pointer transition-all",
                                         selectedListIds.includes(list.id)
-                                            ? "bg-brand-blue/5 border-brand-blue/30 ring-1 ring-brand-blue/10"
-                                            : "bg-white border-brand-gray-100 hover:border-brand-gray-200"
+                                            ? "bg-primary/10 border-primary/30 ring-1 ring-primary/10 shadow-[0_0_15px_rgba(79,70,229,0.1)]"
+                                            : "bg-slate-800/40 border-borderDark hover:border-textSecondary/30"
                                     )}
                                 >
                                     <div className="flex items-center gap-3">
                                         <div className={cn(
                                             "w-4 h-4 rounded border flex items-center justify-center transition-colors",
                                             selectedListIds.includes(list.id)
-                                                ? "bg-brand-blue border-brand-blue"
-                                                : "bg-white border-brand-gray-300"
+                                                ? "bg-primary border-primary"
+                                                : "bg-slate-900 border-borderDark"
                                         )}>
                                             {selectedListIds.includes(list.id) && <Check className="w-3 h-3 text-white" />}
                                         </div>
                                         <div>
-                                            <span className="text-sm font-medium text-brand-gray-900">{list.name}</span>
-                                            <p className="text-[10px] text-brand-gray-400">{list.companyIds.length} companies</p>
+                                            <span className="text-sm font-semibold text-textPrimary">{list.name}</span>
+                                            <p className="text-[10px] text-textSecondary/60 font-medium uppercase tracking-wider">{list.companyIds.length} companies</p>
                                         </div>
                                     </div>
                                     <input
@@ -143,7 +145,7 @@ export default function AddToListModal({ isOpen, onClose, companyId, companyName
                     </div>
                 </div>
 
-                <div className="px-6 py-4 bg-brand-gray-50/50 border-t border-brand-gray-100 flex gap-3">
+                <div className="px-6 py-4 bg-slate-800/50 border-t border-borderDark flex gap-3">
                     <button
                         onClick={onClose}
                         className="btn btn-secondary flex-1"
@@ -154,8 +156,8 @@ export default function AddToListModal({ isOpen, onClose, companyId, companyName
                         onClick={handleSave}
                         disabled={saving || success || lists.length === 0}
                         className={cn(
-                            "btn btn-primary flex-1 gap-2",
-                            success && "bg-emerald-500 hover:bg-emerald-500 border-emerald-500"
+                            "btn btn-primary flex-1 gap-2 shadow-lg shadow-primary/20",
+                            success && "bg-emerald-500 hover:bg-emerald-500 border-none"
                         )}
                     >
                         {saving ? (

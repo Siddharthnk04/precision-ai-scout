@@ -9,6 +9,14 @@ const config: Config = {
     theme: {
         extend: {
             colors: {
+                primary: "#4F46E5",
+                primaryHover: "#4338CA",
+                accent: "#06B6D4",
+                bgDark: "#0F172A",
+                cardDark: "#1E293B",
+                borderDark: "#334155",
+                textPrimary: "#F8FAFC",
+                textSecondary: "#94A3B8",
                 brand: {
                     blue: "#3b82f6",
                     gray: {
